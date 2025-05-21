@@ -1,0 +1,53 @@
+import { Link } from "react-router-dom";
+import logo from "../images/main_logo.png";
+
+function Footer() {
+    return (
+    <>
+        {/* Footer */}
+        <footer class="bg-gray-800 text-white py-8 mt-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-8">
+
+            {/* Cột 1: Logo + mô tả */}
+            <div>
+                <Link to="/">
+                <div
+                    class="h-14 w-14 mb-3 bg-cover bg-center"
+                    style={{ backgroundImage: `url(${logo})` }}
+                ></div>
+                </Link>
+                <p class="text-lg text-gray-400">
+                Flag Finder giúp bạn nhận diện và tìm hiểu quốc kỳ của các quốc gia trên thế giới một cách dễ dàng và chính xác.
+                </p>
+            </div>
+            {/* Cột 2: Menu điều hướng */}
+            <div>
+                <h3 class="text-white text-lg font-semibold mb-4">Liên kết</h3>
+                <ul class="space-y-2 text-gray-400 text-lg">
+                    <li><Link to="/" class="hover:text-white">Trang chủ</Link></li>
+                    <li><Link to="/about-us" class="hover:text-white">Giới thiệu</Link></li>
+                    <li><Link to="/contact" class="hover:text-white">Liên hệ</Link></li>
+                </ul>
+            </div>
+
+            {/* Cột 3: Liên hệ */}
+            <div>
+                <h3 class="text-white text-lg font-semibold mb-4">Tương tác</h3>
+                <ul class="space-y-2 text-gray-400 text-lg">
+                    <li>Facebook: <a href="#" class="hover:text-white">Flag Finder</a></li>
+                    <li>GitHub: <a href="#" class="hover:text-white">github.com/flagfinder</a></li>
+                </ul>
+            </div>
+
+            </div>
+        </div>
+        <div class="mt-5 text-center border-t-1">
+            <p class="mt-4 mb-auto text-lg text-white-400 font-semibold">© 2025 Bản quyền thuộc về Flag Finder</p>
+        </div>
+        </footer>
+    </>
+    )
+}
+
+export default Footer;
