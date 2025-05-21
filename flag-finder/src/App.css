@@ -1,17 +1,17 @@
-/* ImageSearch.css */
-body {
+
+/* body {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   margin: 0;
-}
+} 
 
 .image-search-container {
   max-width: 1024px;
   margin: 0 auto;
   padding: 1.5rem;
-}
+} 
 
 .header {
   margin-bottom: 2rem;
@@ -49,7 +49,7 @@ body {
 
 .file-input {
   display: none;
-}
+} 
 
 .preview-container {
   position: relative;
@@ -61,7 +61,7 @@ body {
   max-width: 100%;
   border-radius: 0.375rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
+} 
 
 .clear-button {
   position: absolute;
@@ -325,4 +325,4 @@ display: inline-block;
 }
 .result-link:hover {
 background-color: #3a5ec4;
-}
+} */
