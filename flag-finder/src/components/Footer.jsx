@@ -12,10 +12,7 @@ function Footer() {
             {/* Cột 1: Logo + mô tả */}
             <div>
                 <Link to="/">
-                <div
-                    class="h-14 w-14 mb-3 bg-cover bg-center"
-                    style={{ backgroundImage: `url(${logo})` }}
-                ></div>
+                    <img src={logo} alt="Logo" className="h-20 w-25 object-cover cursor-pointer rounded" />
                 </Link>
                 <p class="text-lg text-gray-400">
                 Flag Finder giúp bạn nhận diện và tìm hiểu quốc kỳ của các quốc gia trên thế giới một cách dễ dàng và chính xác.

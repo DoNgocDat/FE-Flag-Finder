@@ -1,7 +1,11 @@
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import useInView from "../hooks/useInView";
+import aboutImage from '../images/about.jpg';
 
 function AboutUs() {
+    const [ref, visible] = useInView();
+
     return (
     <>
     <div class="min-h-screen flex flex-col">
@@ -9,10 +13,16 @@ function AboutUs() {
     <Header />
 
     {/* Main */}
-    <main class="flex-grow">
-        <section class="bg-white py-16">
-            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-12">
+    <main class="flex-grow">  
+        {/* <section class="bg-white py-16">            */}
+        <section
+            ref={ref}
+            className={`bg-white py-16 transition-all duration-700 ${
+                visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+            }`}
+        >
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-gray-900 mb-4">Về chúng tôi</h2>
 
                 {/* <div class="w-24 h-1 bg-blue-600 mx-auto mb-6"></div> */}
@@ -20,9 +30,9 @@ function AboutUs() {
                     Flag Finder là một công cụ thông minh được xây dựng nhằm hỗ trợ người dùng trong việc nhận diện quốc kỳ 
                     từ hình ảnh và cung cấp thông tin chi tiết về quốc gia đó. Với công nghệ trí tuệ nhân tạo tiên tiến, chúng tôi mang đến trải nghiệm tìm kiếm hiện đại, nhanh chóng và chính xác.
                 </p>
-                </div>
+            </div>
 
-                <div class="grid md:grid-cols-2 gap-10 items-center">
+            <div class="grid md:grid-cols-2 gap-10 items-center">
                 <div>
                     <h3 class="text-2xl font-semibold text-gray-900 mb-4">Sứ mệnh của chúng tôi</h3>
                     <p class="text-gray-700 mb-4">
@@ -35,16 +45,11 @@ function AboutUs() {
                 </div>
 
                 <div class="rounded-xl overflow-hidden shadow-md">
-                    <img
-                    src="https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1200&q=80"
-                    alt="Globe and flags"
-                    class="w-full h-72 object-cover"
-                    />
-                </div>
+                    <img src={aboutImage} alt="Globe and flags" class="w-full h-72 object-cover" />
                 </div>
             </div>
+        </div>
         </section>
-
     </main>
 
     {/* Footer  */}

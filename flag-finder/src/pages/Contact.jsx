@@ -1,11 +1,13 @@
 import { useState } from "react";
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import useInView from "../hooks/useInView";
 
 function Contact() {
-  const [submitted, setSubmitted] = useState(false);
+    const [submitted, setSubmitted] = useState(false);
+    const [ref, visible] = useInView();
 
-  const handleSubmit = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         const form = e.target;
 
@@ -34,7 +36,13 @@ function Contact() {
 
     {/* Main */}
     <main class="flex-grow">
-        <section class="py-16 bg-white">
+        {/* <section class="bg-white py-16">      */}
+        <section
+            ref={ref}
+            className={`bg-white py-16 transition-all duration-700 ${
+                visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+            }`}
+        >
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-10">
             <h2 class="text-3xl font-bold text-gray-900 mb-4">Liên hệ với chúng tôi</h2>

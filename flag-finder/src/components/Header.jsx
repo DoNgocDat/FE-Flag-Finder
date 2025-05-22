@@ -10,7 +10,7 @@ function Header() {
                 <div class="flex justify-between items-center py-3 relative">
                     <div class="flex items-center">
                         <Link to="/">
-                            <div class='h-12 w-12 cursor-pointer' style={{backgroundImage: `url(${logo})`, backgroundSize: 'cover', backgroundPosition: 'center'}}></div>
+                            <img src={logo} alt="Logo" className="h-12 w-12 object-cover cursor-pointer rounded" />
                         </Link>                    
                         <span class="ml-2 px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">BETA</span>
                     </div>

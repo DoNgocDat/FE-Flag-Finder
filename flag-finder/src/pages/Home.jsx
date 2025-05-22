@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 // import './App.css'
-// import background from './images/background.jpg'
+// import background from '../images/background.jpg'
 import { FaImage, FaFlag, FaSearch } from 'react-icons/fa'
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -15,6 +15,7 @@ function Home() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [openIndex, setOpenIndex] = useState(null);
     const fileInputRef = useRef(null);
+    const resultRef = useRef(null);
 
     // Data mẫu về các quốc gia
     const countriesData = [
@@ -101,21 +102,24 @@ function Home() {
     // Xử lý tìm kiếm
     const handleSearch = () => {
         if (!image) return;
-        
+
         setIsSearching(true);
-        
-        // Giả lập API tìm kiếm
+
         setTimeout(() => {
-        // Kết quả tìm kiếm mẫu với dữ liệu quốc gia thực tế
-        const mockResults = countriesData.map(country => ({
+            const mockResults = countriesData.map(country => ({
             id: country.id,
             title: `${country.name}`,
             imageUrl: country.flag,
-            countryId: country.id  // Link đến dữ liệu quốc gia
-        }));
-        
-        setSearchResults(mockResults);
-        setIsSearching(false);
+            countryId: country.id
+            }));
+
+            setSearchResults(mockResults);
+            setIsSearching(false);
+
+            // Cuộn xuống phần kết quả sau khi render xong
+            setTimeout(() => {
+            resultRef.current?.scrollIntoView({ behavior: "smooth" });
+            }, 100);
         }, 1500);
     };
     
@@ -223,91 +227,91 @@ function Home() {
           backgroundImage: `url(${background})`,
           // filter: 'blur(2px)',
         }}
-      />       */}
+      /> */}
 
         <div class="max-w-screen-lg mx-auto p-6">
             <div class="text-center mb-10">
-            <h2 class="text-4xl font-bold text-gray-900 mb-3">Tìm kiếm hình ảnh cờ quốc gia</h2>
-            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-                Tải lên hình ảnh quốc kỳ để tìm kiếm thông tin chi tiết về quốc gia đó
-            </p>
+                <h2 class="text-4xl font-bold text-gray-900 mb-3">Tìm kiếm hình ảnh cờ quốc gia</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    Tải lên hình ảnh quốc kỳ để tìm kiếm thông tin chi tiết về quốc gia đó
+                </p>
             </div>
 
-            <div class="max-w-xl bg-white rounded-xl shadow-md overflow-hidden mb-5 mx-auto relative z-100">
-            <div class="p-8">
-                {/* Khu vực tải lên hình ảnh */}
-                <div 
-                class={`border-2 border-dashed border-gray-300 rounded-lg 
-                p-8 mb-6 text-center cursor-pointer transition duration-300 
-                ease-in-out hover:border-blue-400 ${isDragging ? 'border-blue-600 bg-blue-50' : ''}`}
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onDrop={handleDrop}
-                onClick={handleBrowseClick}
-                >
-                <input 
-                    type="file" 
-                    class="hidden" 
-                    accept="image/*" 
-                    onChange={handleFileChange}
-                    ref={fileInputRef}
-                />
-                
-                {previewUrl ? (
-                    <div class="relative inline-block">
-                    <img 
-                        src={previewUrl} 
-                        alt="Preview" 
-                        class="max-h-64 max-w-full rounded-md shadow-md"
-                    />
-                    <button 
-                        class="absolute -top-3 -right-3 bg-red-500 text-white p-2 rounded-full cursor-pointer
-                            shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500
-                            focus:ring-opacity-75 transition-colors duration-200"
-                        onClick={(e) => {
-                        e.stopPropagation();
-                        handleClear();
-                        }}
+            <div class="max-w-xl bg-white rounded-xl shadow-md overflow-hidden mb-5 mx-auto relative z-10">
+                <div class="p-8">
+                    {/* Khu vực tải lên hình ảnh */}
+                    <div 
+                    class={`border-2 border-dashed border-gray-300 rounded-lg 
+                    p-8 mb-6 text-center cursor-pointer transition duration-300 
+                    ease-in-out hover:border-blue-400 ${isDragging ? 'border-blue-600 bg-blue-50' : ''}`}
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDrop}
+                    onClick={handleBrowseClick}
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                    <input 
+                        type="file" 
+                        class="hidden" 
+                        accept="image/*" 
+                        onChange={handleFileChange}
+                        ref={fileInputRef}
+                    />
+                    
+                    {previewUrl ? (
+                        <div class="relative inline-block">
+                        <img 
+                            src={previewUrl} 
+                            alt="Preview" 
+                            class="max-h-64 max-w-full rounded-md shadow-md"
+                        />
+                        <button 
+                            class="absolute -top-3 -right-3 bg-red-500 text-white p-2 rounded-full cursor-pointer
+                                shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500
+                                focus:ring-opacity-75 transition-colors duration-200"
+                            onClick={(e) => {
+                            e.stopPropagation();
+                            handleClear();
+                            }}
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                            </svg>
+                        </button>
+                        </div>
+                    ) : (
+                        <div class="flex flex-col items-center">
+                        <svg class="h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                         </svg>
+                        <p class="mt-4 text-gray-600 font-medium">Kéo thả hình ảnh vào đây hoặc nhấn để chọn file</p>
+                        <p class="mt-2 text-sm text-gray-500">Hoặc dán ảnh từ bộ nhớ tạm (Ctrl+V)</p>
+                        </div>
+                    )}
+                    </div>
+
+                    {/* Nút tìm kiếm */}
+                    <div class="flex justify-center mb-auto">
+                    <button 
+                        class={`py-2 px-6 rounded-md font-medium text-lg text-white transition-colors duration-200
+                        ${image && !isSearching 
+                            ? 'bg-blue-600 hover:bg-blue-700 cursor-pointer'
+                            : 'bg-gray-400 cursor-not-allowed'}
+                        `}
+                        onClick={handleSearch}
+                        disabled={!image || isSearching}
+                    >
+                        {isSearching ? (
+                        <span class="flex items-center">
+                            <svg class="animate-spin mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Đang tìm kiếm...
+                        </span>
+                        ) : 'Tìm kiếm bằng hình ảnh này'}
                     </button>
                     </div>
-                ) : (
-                    <div class="flex flex-col items-center">
-                    <svg class="h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                    </svg>
-                    <p class="mt-4 text-gray-600 font-medium">Kéo thả hình ảnh vào đây hoặc nhấn để chọn file</p>
-                    <p class="mt-2 text-sm text-gray-500">Hoặc dán ảnh từ bộ nhớ tạm (Ctrl+V)</p>
-                    </div>
-                )}
                 </div>
-
-                {/* Nút tìm kiếm */}
-                <div class="flex justify-center mb-auto">
-                <button 
-                    class={`py-2 px-6 rounded-md font-medium text-lg text-white transition-colors duration-200
-                    ${image && !isSearching 
-                        ? 'bg-blue-600 hover:bg-blue-700 cursor-pointer'
-                        : 'bg-gray-400 cursor-not-allowed'}
-                    `}
-                    onClick={handleSearch}
-                    disabled={!image || isSearching}
-                >
-                    {isSearching ? (
-                    <span class="flex items-center">
-                        <svg class="animate-spin mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        Đang tìm kiếm...
-                    </span>
-                    ) : 'Tìm kiếm bằng hình ảnh này'}
-                </button>
-                </div>
-            </div>
             </div>
 
             {/* Hướng dẫn sử dụng */}
@@ -365,7 +369,7 @@ function Home() {
 
             {/* Kết quả tìm kiếm */}
             {searchResults.length > 0 && (
-            <div class="mt-6">
+            <div class="mt-6" ref={resultRef}>
                 <h2 class="text-xl font-semibold mb-4">Kết quả tìm kiếm</h2>
                 <div class="flex md:grid-cols-2 gap-4 ">
                 {searchResults.map(result => (
@@ -527,7 +531,7 @@ function Home() {
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mt-1 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
-                        <span class="text-gray-700">Độ chính xác cao trong nhận diện lá cờ từ nhiều góc độ khác nhau</span>
+                        <span class="text-gray-700">Độ chính xác cao trong nhận diện lá cờ khác nhau</span>
                     </li>
                     <li class="flex items-start">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mt-1 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
