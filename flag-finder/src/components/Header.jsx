@@ -14,10 +14,10 @@ function Header() {
                         </Link>                    
                         <span class="ml-2 px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">BETA</span>
                     </div>
-                    <nav class="absolute left-1/2 -translate-x-1/2 flex space-x-10">
-                        <Link to="/" class="text-lg text-gray-500 hover:text-gray-900 font-semibold">Trang chủ</Link>
-                        <Link to="/about-us" class="text-lg text-gray-500 hover:text-gray-900 font-semibold">Về chúng tôi</Link>
-                        <Link to="/contact" class="text-lg text-gray-500 hover:text-gray-900 font-semibold">Liên hệ</Link>
+                    <nav class="absolute left-1/2 -translate-x-1/2 flex space-x-20">
+                        <Link to="/" class="text-xl text-gray-500 hover:text-gray-900 font-semibold">Trang chủ</Link>
+                        <Link to="/about-us" class="text-xl text-gray-500 hover:text-gray-900 font-semibold">Về chúng tôi</Link>
+                        <Link to="/contact" class="text-xl text-gray-500 hover:text-gray-900 font-semibold">Liên hệ</Link>
                     </nav>
 
                 </div>
