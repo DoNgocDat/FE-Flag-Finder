@@ -35,8 +35,8 @@ function Footer() {
             <div>
                 <h3 class="text-white text-lg font-semibold mb-4">Tương tác</h3>
                 <ul class="space-y-2 text-gray-400 text-lg">
-                    <li>Facebook: <a href="#" class="hover:text-white">Flag Finder</a></li>
-                    <li>GitHub: <a href="#" class="hover:text-white">github.com/flagfinder</a></li>
+                    <li><Link to="#" class="hover:text-white">Facebook</Link></li>
+                    <li><Link to="#" class="hover:text-white">Github</Link></li>
                 </ul>
             </div>
 
