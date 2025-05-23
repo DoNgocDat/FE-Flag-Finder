@@ -30,29 +30,29 @@ function Contact() {
 
     return (
     <>
-    <div class="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col">
     {/* Header  */}
     <Header />
 
     {/* Main */}
-    <main class="flex-grow">
-        {/* <section class="bg-white py-16">      */}
+    <main className="flex-grow">
+        {/* <section className="bg-white py-16">      */}
         <section
             ref={ref}
-            className={`bg-white py-16 transition-all duration-700 ${
+            classNameName={`bg-white py-16 transition-all duration-700 ${
                 visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
             }`}
         >
-        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-10">
-            <h2 class="text-3xl font-bold text-gray-900 mb-4">Liên hệ với chúng tôi</h2>
-            <p class="text-gray-600 text-lg">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-10">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Liên hệ với chúng tôi</h2>
+            <p className="text-gray-600 text-lg">
                 Nếu bạn có bất kỳ thắc mắc hoặc góp ý, hãy gửi cho chúng tôi qua biểu mẫu dưới đây.
             </p>
             </div>
 
             {submitted ? (
-            <div class="bg-green-100 border border-green-400 text-green-700 px-6 py-4 rounded-lg text-center font-medium">
+            <div className="bg-green-100 border border-green-400 text-green-700 px-6 py-4 rounded-lg text-center font-medium">
                 Cảm ơn bạn! Chúng tôi đã nhận được liên hệ của bạn.
             </div>
             ) : (
@@ -60,42 +60,42 @@ function Contact() {
                 onSubmit={handleSubmit}
                 action="https://formspree.io/f/xrbqvzon"
                 method="POST"
-                class="bg-gray-50 p-8 rounded-xl shadow-md space-y-6"
+                className="bg-gray-50 p-8 rounded-xl shadow-md space-y-6"
             >
                 <div>
-                <label class="block text-gray-700 font-medium mb-1">Họ và tên</label>
+                <label className="block text-gray-700 font-medium mb-1">Họ và tên</label>
                 <input
                     type="text"
                     name="name"
                     required
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
                 </div>
 
                 <div>
-                <label class="block text-gray-700 font-medium mb-1">Email</label>
+                <label className="block text-gray-700 font-medium mb-1">Email</label>
                 <input
                     type="email"
                     name="email"
                     required
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
                 </div>
 
                 <div>
-                <label class="block text-gray-700 font-medium mb-1">Nội dung</label>
+                <label className="block text-gray-700 font-medium mb-1">Nội dung</label>
                 <textarea
                     name="message"
                     rows="5"
                     required
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
                 ></textarea>
                 </div>
 
-                <div class="text-center">
+                <div className="text-center">
                 <button
                     type="submit"
-                    class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-700 transition cursor-pointer"
+                    className="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-blue-700 transition cursor-pointer"
                 >
                     Gửi liên hệ
                 </button>
