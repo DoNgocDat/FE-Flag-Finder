@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import axios from 'axios';
 // import './App.css'
 // import background from '../images/background_2.jpg'
 import { FaImage, FaFlag, FaSearch } from 'react-icons/fa'
@@ -14,37 +15,13 @@ function Home() {
     const [searchResults, setSearchResults] = useState([]);
     const [selectedCountry, setSelectedCountry] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [errorImages, setErrorImages] = useState({});
     const [openIndex, setOpenIndex] = useState(null);
     const fileInputRef = useRef(null);
     const resultRef = useRef(null);
 
-    // Data mẫu về các quốc gia
-    const countriesData = [
-        {
-        id: 1,
-        name: "Việt Nam",
-        flag: "/api/placeholder/300/200",
-        region: "Southeast Asia",
-        population: "97,338,579",
-        area: "331,210",
-        popDensity: "293.9",
-        coastline: "0.35",
-        netMigration: "-0.3",
-        infantMortality: "16.7",
-        gdp: "8,397",
-        literacy: "94.5",
-        phones: "125",
-        arable: "20.6",
-        crops: "12.1",
-        other: "67.3",
-        climate: "Tropical",
-        birthrate: "15.9",
-        deathrate: "5.9",
-        agriculture: "15.8",
-        industry: "33.8",
-        service: "50.4"
-        }
-    ];
+    const BASE_URL = 'http://localhost:8000';
+    const FALLBACK_IMAGE = 'https://placehold.co/150x150?text=Không+Tìm+Thấy';
 
     // Xử lý khi chọn file
     const handleFileChange = (e) => {
@@ -101,29 +78,52 @@ function Home() {
     };
 
     // Xử lý tìm kiếm
-    const handleSearch = () => {
+    const handleSearch = async() => {
         if (!image) return;
 
         setIsSearching(true);
 
+        try {
+            const formData = new FormData();
+            formData.append('file', image);
+
+            const response = await axios.post('http://localhost:8000/search-flag', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' },
+            });
+
+            console.log('Phản hồi backend:', response.data);
+            setSearchResults(response.data);
+            setErrorImages({});
+            } catch (error) {
+                console.error('Lỗi khi tìm kiếm:', error.response?.data || error.message);
+                alert('Đã xảy ra lỗi khi tìm kiếm. Vui lòng thử lại.');
+            } finally {
+                setIsSearching(false);
+            }
         setTimeout(() => {
-            const mockResults = countriesData.map(country => ({
-            id: country.id,
-            title: `Quốc gia ${country.name}`,
-            imageUrl: country.flag,
-            countryId: country.id
-            }));
+            // // const mockResults = countryData.map(country => ({
+            // // id: country.id,
+            // // title: `Quốc gia ${country.name}`,
+            // // imageUrl: country.flag,
+            // // countryId: country.id
+            // // }));
 
-            setSearchResults(mockResults);
-            setIsSearching(false);
+            // setSearchResults(mockResults);
+            // setIsSearching(false);
 
-            // Cuộn xuống phần kết quả sau khi render xong
+            // // Cuộn xuống phần kết quả sau khi render xong
             setTimeout(() => {
             resultRef.current?.scrollIntoView({ behavior: "smooth" });
             }, 100);
         }, 1500);
     };
     
+    const handleImageError = (e, imagePath) => {
+        console.log('Image error for path:', imagePath);
+        setErrorImages((prev) => ({ ...prev, [imagePath]: true }));
+        e.target.src = FALLBACK_IMAGE;
+    };
+
     // Xóa hình ảnh đã chọn
     const handleClear = () => {
         setImage(null);
@@ -135,12 +135,10 @@ function Home() {
     };
 
     // Mở modal và hiển thị thông tin chi tiết của quốc gia
-    const handleViewDetails = (countryId) => {
-        const country = countriesData.find(c => c.id === countryId);
-        if (country) {
-        setSelectedCountry(country);
+    const handleViewDetails = (countryData) => {
+        console.log('Quốc gia được chọn:', countryData);
+        setSelectedCountry(countryData);
         setIsModalOpen(true);
-        }
     };
     
     // Đóng modal
@@ -165,9 +163,8 @@ function Home() {
         };
 
         window.addEventListener('keydown', handleEscKeyPress);
-
         return () => {
-        window.removeEventListener('keydown', handleEscKeyPress);
+            window.removeEventListener('keydown', handleEscKeyPress);
         };
     }, [isModalOpen]);
 
@@ -374,16 +371,19 @@ function Home() {
             {/* Kết quả tìm kiếm */}
             {searchResults.length > 0 && (
             <div className="mt-6" ref={resultRef}>
-                <h2 className="text-xl font-semibold mb-4">Kết quả tìm kiếm</h2>
+                <h2 className="text-xl font-semibold mb-4">Kết quả tìm kiếm:</h2>
                 <div className="flex md:grid-cols-2 gap-4 ">
-                {searchResults.map(result => (
-                    <div key={result.id} className="border border-gray-200 rounded-lg overflow-hidden shadow-sm">
-                    <img src={result.imageUrl} alt={result.title} className="w-full h-40 object-cover" />
+                {searchResults.map((result, index) => (
+                    <div key={index} className="border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+                    <img src={result.image_path ? `${BASE_URL}/${result.image_path}` : FALLBACK_IMAGE}
+                         alt={`Cờ ${result.country_name}`}
+                         className="w-full h-40 object-cover"
+                         onError={handleImageError} />
                     <div className="p-4">
-                        <h3 className="font-medium">{result.title}</h3>
+                        <h3 className="font-medium">Cờ: {searchResults.country_name}{result.country_name}</h3>
                         <button 
                         className="bg-blue-600 text-white py-1.5 px-3 rounded text-sm mt-2 hover:bg-blue-700 transition duration-200 cursor-pointer"
-                        onClick={() => handleViewDetails(result.countryId)}
+                        onClick={() => handleViewDetails(result)}
                         >
                         Xem chi tiết
                         </button>                
@@ -395,95 +395,102 @@ function Home() {
             )}
 
             {/* Modal Dialog cho thông tin chi tiết quốc gia */}
-            {isModalOpen && selectedCountry && (
+            {isModalOpen && selectedCountry &&  (
             <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50" onClick={handleCloseModal}>
                 <div className="bg-white rounded-lg w-11/12 max-w-3xl max-h-[90vh] overflow-auto shadow-xl animate-modalAppear" onClick={(e) => e.stopPropagation()}>
                 <div className="flex justify-between items-center p-4 border-b border-gray-200">
-                    <h2 className="text-2xl font-semibold text-gray-800 m-0">{selectedCountry.name}</h2>
+                    <h2 className="text-2xl font-semibold text-gray-800 m-0"> {selectedCountry.country_name}</h2>
                     <button className="bg-transparent border-none text-4xl cursor-pointer text-gray-600 hover:text-black transition-colors duration-200" onClick={handleCloseModal}>×</button>
                 </div>
                 <div className="p-5 flex flex-col md:flex-row gap-5">
                     <div className="flex-none flex justify-center items-start">
-                    <img src={selectedCountry.flag} alt={`Cờ của ${selectedCountry.name}`} className="w-full max-w-xs border border-gray-200 shadow-sm" />
+                    {selectedCountry.image_path ? (
+                        <img src={errorImages[selectedCountry.image_path] ? FALLBACK_IMAGE : `${BASE_URL}/${selectedCountry.image_path}`} alt={`Cờ của ${selectedCountry.country_name}`}
+                         className="w-full max-w-xs border border-gray-200 shadow-sm"
+                         onError={(e) => handleImageError(e, selectedCountry.image_path)} 
+                        />
+                        ) : (
+                           <img src={FALLBACK_IMAGE} alt="Không có hình ảnh" className="country-flag" />
+                        )}
                     </div>
                     <div className="flex-1">
                     <table className="w-full border-collapse">
                         <tbody>
                         <tr className="even:bg-gray-50">
                             <th className="p-2 text-left font-semibold text-gray-600 w-2/5 border-b border-gray-200">Khu vực</th>
-                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.region}</td>
+                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.region || 'N/A'}</td>
                         </tr>
                         <tr className="even:bg-gray-50">
                             <th className="p-2 text-left font-semibold text-gray-600 border-b border-gray-200">Dân số</th>
-                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.population}</td>
+                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.population ? new Intl.NumberFormat('vi-VN').format(selectedCountry.population) : 'N/A'}</td>
                         </tr>
                         <tr className="even:bg-gray-50">
-                            <th className="p-2 text-left font-semibold text-gray-600 border-b border-gray-200">Diện tích (sq. mi.)</th>
-                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.area}</td>
+                            <th className="p-2 text-left font-semibold text-gray-600 border-b border-gray-200">Diện tích (km²)</th>
+                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.area ? new Intl.NumberFormat('vi-VN').format(selectedCountry.area) : 'N/A'}</td>
                         </tr>
                         <tr className="even:bg-gray-50">
                             <th className="p-2 text-left font-semibold text-gray-600 border-b border-gray-200">Mật độ dân số (/sq. mi.)</th>
-                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.popDensity}</td>
+                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.pop_density || 'N/A'}</td>
                         </tr>
                         <tr className="even:bg-gray-50">
                             <th className="p-2 text-left font-semibold text-gray-600 border-b border-gray-200">Tỷ lệ bờ biển</th>
-                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.coastline}</td>
+                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.coastline_ratio || 'N/A'}</td>
                         </tr>
                         <tr className="even:bg-gray-50">
                             <th className="p-2 text-left font-semibold text-gray-600 border-b border-gray-200">Di cư thuần</th>
-                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.netMigration}</td>
+                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.net_migration || 'N/A'}</td>
                         </tr>
                         <tr className="even:bg-gray-50">
                             <th className="p-2 text-left font-semibold text-gray-600 border-b border-gray-200">Tỷ lệ tử vong trẻ sơ sinh (/1000)</th>
-                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.infantMortality}</td>
+                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.infant_mortality  || 'N/A'}</td>
                         </tr>
                         <tr className="even:bg-gray-50">
                             <th className="p-2 text-left font-semibold text-gray-600 border-b border-gray-200">GDP ($/người)</th>
-                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.gdp}</td>
+                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.gdp_per_capita ? new Intl.NumberFormat('vi-VN').format(selectedCountry.gdp_per_capita) : 'N/A'}</td>
                         </tr>
                         <tr className="even:bg-gray-50">
                             <th className="p-2 text-left font-semibold text-gray-600 border-b border-gray-200">Tỷ lệ biết chữ (%)</th>
-                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.literacy}</td>
+                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.literacy  || 'N/A'}</td>
                         </tr>
                         <tr className="even:bg-gray-50">
                             <th className="p-2 text-left font-semibold text-gray-600 border-b border-gray-200">Điện thoại (/1000)</th>
-                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.phones}</td>
+                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.phones_per_1000  || 'N/A'}</td>
                         </tr>
                         <tr className="even:bg-gray-50">
                             <th className="p-2 text-left font-semibold text-gray-600 border-b border-gray-200">Đất canh tác (%)</th>
-                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.arable}</td>
+                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.arable  || 'N/A'}</td>
                         </tr>
                         <tr className="even:bg-gray-50">
                             <th className="p-2 text-left font-semibold text-gray-600 border-b border-gray-200">Cây trồng (%)</th>
-                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.crops}</td>
+                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.crops  || 'N/A'}</td>
                         </tr>
                         <tr className="even:bg-gray-50">
                             <th className="p-2 text-left font-semibold text-gray-600 border-b border-gray-200">Khác (%)</th>
-                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.other}</td>
+                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.other  || 'N/A'}</td>
                         </tr>
                         <tr className="even:bg-gray-50">
                             <th className="p-2 text-left font-semibold text-gray-600 border-b border-gray-200">Khí hậu</th>
-                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.climate}</td>
+                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.climate  || 'N/A'}</td>
                         </tr>
                         <tr className="even:bg-gray-50">
                             <th className="p-2 text-left font-semibold text-gray-600 border-b border-gray-200">Tỷ lệ sinh</th>
-                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.birthrate}</td>
+                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.birthrate  || 'N/A'}</td>
                         </tr>
                         <tr className="even:bg-gray-50">
                             <th className="p-2 text-left font-semibold text-gray-600 border-b border-gray-200">Tỷ lệ tử vong</th>
-                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.deathrate}</td>
+                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.deathrate  || 'N/A'}</td>
                         </tr>
                         <tr className="even:bg-gray-50">
                             <th className="p-2 text-left font-semibold text-gray-600 border-b border-gray-200">Nông nghiệp (%)</th>
-                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.agriculture}</td>
+                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.agriculture  || 'N/A'}</td>
                         </tr>
                         <tr className="even:bg-gray-50">
                             <th className="p-2 text-left font-semibold text-gray-600 border-b border-gray-200">Công nghiệp (%)</th>
-                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.industry}</td>
+                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.industry  || 'N/A'}</td>
                         </tr>
                         <tr className="even:bg-gray-50">
                             <th className="p-2 text-left font-semibold text-gray-600 border-b border-gray-200">Dịch vụ (%)</th>
-                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.service}</td>
+                            <td className="p-2 text-left border-b border-gray-200">{selectedCountry.service  || 'N/A'}</td>
                         </tr>
                         </tbody>
                     </table>
