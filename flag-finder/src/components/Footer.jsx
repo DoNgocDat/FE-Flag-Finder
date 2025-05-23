@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { FaHome, FaInfoCircle, FaEnvelope, FaFacebook, FaGithub } from "react-icons/fa";
 import logo from "../images/main_logo.png";
 import FadeInSection from "./FadeInSection";
 
@@ -16,26 +17,41 @@ function Footer() {
                 <Link to="/">
                     <img src={logo} alt="Logo" className="h-20 w-25 object-cover cursor-pointer rounded" />
                 </Link>
-                <p class="text-lg text-gray-400">
+                <p class="text-lg text-white">
                 Flag Finder giúp bạn nhận diện và tìm hiểu quốc kỳ của các quốc gia trên thế giới một cách dễ dàng và chính xác.
                 </p>
             </div>
             {/* Cột 2: Menu điều hướng */}
             <div>
-                <h3 class="text-white text-lg font-semibold mb-4">Liên kết</h3>
-                <ul class="space-y-2 text-gray-400 text-lg">
-                    <li><Link to="/" class="hover:text-white">Trang chủ</Link></li>
-                    <li><Link to="/about-us" class="hover:text-white">Giới thiệu</Link></li>
-                    <li><Link to="/contact" class="hover:text-white">Liên hệ</Link></li>
+                <h3 class="text-white text-lg font-semibold mb-4">Liên kết</h3> 
+                <ul class="space-y-2 text-white-400 text-lg">
+                    <li class="flex items-center space-x-2">
+                        <FaHome />
+                        <Link to="/" class="hover:text-gray-300">Trang chủ</Link>
+                    </li>
+                    <li class="flex items-center space-x-2">
+                        <FaInfoCircle />
+                        <Link to="/about-us" class="hover:text-gray-300">Giới thiệu</Link>
+                    </li>
+                    <li class="flex items-center space-x-2">
+                        <FaEnvelope />
+                        <Link to="/contact" class="hover:text-gray-300">Liên hệ</Link>
+                    </li>
                 </ul>
             </div>
 
             {/* Cột 3: Liên hệ */}
             <div>
                 <h3 class="text-white text-lg font-semibold mb-4">Tương tác</h3>
-                <ul class="space-y-2 text-gray-400 text-lg">
-                    <li><Link to="#" class="hover:text-white">Facebook</Link></li>
-                    <li><Link to="#" class="hover:text-white">Github</Link></li>
+                <ul class="space-y-2 text-white text-lg">
+                    <li class="flex items-center space-x-2">
+                        <FaFacebook />
+                        <Link to="#" class="hover:text-gray-300">Facebook</Link>
+                    </li>
+                    <li class="flex items-center space-x-2">
+                        <FaGithub />
+                        <Link to="#" class="hover:text-gray-300">Github</Link>
+                    </li>
                 </ul>
             </div>
 

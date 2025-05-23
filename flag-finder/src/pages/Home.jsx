@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 // import './App.css'
-// import background from '../images/background.jpg'
+// import background from '../images/background_2.jpg'
 import { FaImage, FaFlag, FaSearch } from 'react-icons/fa'
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -221,12 +221,12 @@ function Home() {
     <Header />
 
     {/* Main */}
-    <main className="flex flex-grow justify-center items-center min-h-screen m-0">
+    <main className="flex flex-grow justify-center items-center min-h-screen m-0 pt-20">
       {/* <div
         className="fixed inset-0 -z-10 bg-center bg-no-repeat bg-fit"
         style={{
           backgroundImage: `url(${background})`,
-          // filter: 'blur(2px)',
+        //   filter: 'blur(1px)',
         }}
       /> */}
 

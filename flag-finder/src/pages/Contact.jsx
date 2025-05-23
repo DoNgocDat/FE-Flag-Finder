@@ -34,7 +34,7 @@ function Contact() {
     <Header />
 
     {/* Main */}
-    <main className="flex-grow">
+    <main className="flex-grow pt-20">
         <FadeInSection className="bg-white py-16">     
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-10">

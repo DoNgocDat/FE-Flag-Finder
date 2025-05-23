@@ -1,6 +1,6 @@
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import aboutImage from '../images/about.jpg';
+// import aboutImage from '../images/about.jpg';
 import FadeInSection from '../components/FadeInSection';
 
 function AboutUs() {
@@ -11,14 +11,8 @@ function AboutUs() {
     <Header />
 
     {/* Main */}
-    <main className="flex-grow">  
+    <main className="flex-grow pt-20">  
         <FadeInSection className="bg-white py-16">
-        {/* <section
-            ref={ref}
-            classNameName={`bg-white py-16 transition-all duration-700 ${
-                visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-            }`}
-        > */}
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">Về chúng tôi</h2>
@@ -43,7 +37,20 @@ function AboutUs() {
                 </div>
 
                 <div className="rounded-xl overflow-hidden shadow-md">
-                    <img src={aboutImage} alt="Globe and flags" className="w-full h-72 object-cover" />
+                    {/* <img src={aboutImage} alt="Globe and flags" className="w-full h-72 object-cover" /> */}
+                    <div className="rounded-xl overflow-hidden shadow-md">
+                        <video
+                            className="w-full h-72 object-cover"
+                            autoPlay
+                            muted
+                            loop
+                            playsInline
+                        >
+                            <source src="/video.mp4" type="video/mp4" />
+                            Trình duyệt của bạn không hỗ trợ video.
+                        </video>
+                    </div>
+
                 </div>
             </div>
         </div>
