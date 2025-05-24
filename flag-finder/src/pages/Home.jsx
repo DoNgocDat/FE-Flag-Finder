@@ -21,7 +21,7 @@ function Home() {
     const resultRef = useRef(null);
 
     const BASE_URL = 'http://localhost:8000';
-    const FALLBACK_IMAGE = 'https://placehold.co/150x150?text=Không+Tìm+Thấy';
+    const FALLBACK_IMAGE = 'https://placehold.co/150x150';
 
     // Xử lý khi chọn file
     const handleFileChange = (e) => {
