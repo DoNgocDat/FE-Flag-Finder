@@ -432,7 +432,7 @@ function Home() {
                         <img
                             src={result.image_path ? `${BASE_URL}/${result.image_path}` : FALLBACK_IMAGE}
                             alt={`Cờ ${result.country_name}`}
-                            className="w-full h-36 object-cover rounded-t-xl"
+                            className="w-full h-36 object-fill rounded-t-xl"
                             onError={handleImageError}
                         />
 
