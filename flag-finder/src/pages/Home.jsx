@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import axios from 'axios';
 // import './App.css'
 // import background from '../images/background_2.jpg'
-import { FaImage, FaFlag, FaSearch } from 'react-icons/fa'
+import { FaImage, FaFlag, FaSearch, FaInfoCircle } from 'react-icons/fa'
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import FadeInSection from '../components/FadeInSection';
@@ -94,12 +94,12 @@ function Home() {
             console.log('Phản hồi backend:', response.data);
             setSearchResults(response.data);
             setErrorImages({});
-            } catch (error) {
-                console.error('Lỗi khi tìm kiếm:', error.response?.data || error.message);
-                alert('Đã xảy ra lỗi khi tìm kiếm. Vui lòng thử lại.');
-            } finally {
-                setIsSearching(false);
-            }
+        } catch (error) {
+            console.error('Lỗi khi tìm kiếm:', error.response?.data || error.message);
+            alert('Đã xảy ra lỗi khi tìm kiếm. Vui lòng thử lại.');
+        } finally {
+            setIsSearching(false);
+        }
         setTimeout(() => {
             // // const mockResults = countryData.map(country => ({
             // // id: country.id,
@@ -111,11 +111,11 @@ function Home() {
             // setSearchResults(mockResults);
             // setIsSearching(false);
 
-            // // Cuộn xuống phần kết quả sau khi render xong
+            // Cuộn xuống phần kết quả sau khi render xong
             setTimeout(() => {
-            resultRef.current?.scrollIntoView({ behavior: "smooth" });
+                resultRef.current?.scrollIntoView({ behavior: "smooth" });
             }, 100);
-        }, 1500);
+        }, 500);
     };
     
     const handleImageError = (e, imagePath) => {
@@ -145,6 +145,52 @@ function Home() {
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
+
+    const fieldDescriptions = {
+        region: "Khu vực địa lý mà quốc gia thuộc về, ví dụ: Châu Á, Châu Âu, Châu Phi, v.v.",
+        population: "Tổng số người sinh sống tại quốc gia này.",
+        area: "Tổng diện tích đất liền của quốc gia, tính bằng kilomet vuông.",
+        pop_density: "Mật độ dân số tính theo số người trên mỗi km².",
+        coastline_ratio: "Tỷ lệ giữa chiều dài bờ biển và diện tích đất liền.",
+        net_migration: "Chênh lệch giữa số người nhập cư và xuất cư mỗi năm.",
+        infant_mortality: "Tỷ lệ tử vong của trẻ sơ sinh trên 1000 ca sinh sống.",
+        gdp_per_capita: "Tổng thu nhập bình quân đầu người theo USD.",
+        literacy: "Tỷ lệ biết đọc biết viết của dân số trên 15 tuổi.",
+        phones_per_1000: "Số lượng điện thoại cố định trên 1000 dân.",
+        arable: "Tỷ lệ đất canh tác dùng để trồng trọt ngắn hạn.",
+        crops: "Tỷ lệ đất trồng cây lâu năm.",
+        other: "Tỷ lệ đất còn lại không dùng cho nông nghiệp.",
+        climate: "Chỉ số mô tả điều kiện khí hậu (1: khô hạn, 2: ôn đới, ...).",
+        birthrate: "Tỷ lệ sinh trên mỗi 1000 dân mỗi năm.",
+        deathrate: "Tỷ lệ tử vong trên mỗi 1000 dân mỗi năm.",
+        agriculture: "Tỷ lệ GDP đóng góp bởi ngành nông nghiệp.",
+        industry: "Tỷ lệ GDP đóng góp bởi ngành công nghiệp.",
+        service: "Tỷ lệ GDP đóng góp bởi ngành dịch vụ.",
+    };
+
+    const fieldLabels = {
+        region: "Khu vực",
+        population: "Dân số",
+        area: "Diện tích (km²)",
+        pop_density: "Mật độ dân số (/km²)",
+        coastline_ratio: "Tỷ lệ bờ biển",
+        net_migration: "Di cư thuần",
+        infant_mortality: "Tỷ lệ tử vong trẻ sơ sinh",
+        gdp_per_capita: "GDP ($/người)",
+        literacy: "Tỷ lệ biết chữ (%)",
+        phones_per_1000: "Điện thoại (/1000)",
+        arable: "Đất canh tác (%)",
+        crops: "Cây trồng (%)",
+        other: "Khác (%)",
+        climate: "Khí hậu",
+        birthrate: "Tỷ lệ sinh",
+        deathrate: "Tỷ lệ tử vong",
+        agriculture: "Nông nghiệp (%)",
+        industry: "Công nghiệp (%)",
+        service: "Dịch vụ (%)",
+    };
+
+
     
     // Thêm event listener cho paste
     useEffect(() => {
@@ -370,43 +416,58 @@ function Home() {
 
             {/* Kết quả tìm kiếm */}
             {searchResults.length > 0 && (
-            <div className="mt-6" ref={resultRef}>
-                <h2 className="text-xl font-semibold mb-4">Kết quả tìm kiếm:</h2>
-                <div className="flex md:grid-cols-2 gap-4 ">
-                {searchResults.map((result, index) => (
-                    <div key={index} className="border border-gray-200 rounded-lg overflow-hidden shadow-sm">
-                    <img src={result.image_path ? `${BASE_URL}/${result.image_path}` : FALLBACK_IMAGE}
-                         alt={`Cờ ${result.country_name}`}
-                         className="w-full h-40 object-cover"
-                         onError={handleImageError} />
-                    <div className="p-4">
-                        <h3 className="font-medium">Cờ: {searchResults.country_name}{result.country_name}</h3>
-                        <button 
-                        className="bg-blue-600 text-white py-1.5 px-3 rounded text-sm mt-2 hover:bg-blue-700 transition duration-200 cursor-pointer"
-                        onClick={() => handleViewDetails(result)}
+            <div className="mt-6 scroll-mt-20" ref={resultRef}>
+                <div className="border border-blue-300 bg-blue-50 rounded-xl p-6 shadow-inner">
+                <h2 className="text-3xl font-bold text-blue-800 mb-6 text-center flex items-center justify-center gap-2">
+                    <FaFlag className="text-blue-600 w-5 h-5" />
+                    Kết quả tìm kiếm
+                </h2>
+
+                <div className="flex flex-wrap justify-center gap-6">
+                    {searchResults.map((result, index) => (
+                    <div
+                        key={index}
+                        className="w-60 border border-gray-200 rounded-xl bg-white shadow-md hover:shadow-lg transition-all duration-300"
+                    >
+                        <img
+                            src={result.image_path ? `${BASE_URL}/${result.image_path}` : FALLBACK_IMAGE}
+                            alt={`Cờ ${result.country_name}`}
+                            className="w-full h-36 object-cover rounded-t-xl"
+                            onError={handleImageError}
+                        />
+
+                        <div className="p-4 text-center">
+                        <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                            {result.country_name || 'Không xác định'}
+                        </h3>
+                        <button
+                            className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-700 transition-colors duration-200 cursor-pointer"
+                            onClick={() => handleViewDetails(result)}
                         >
-                        Xem chi tiết
-                        </button>                
+                            Xem chi tiết
+                        </button>
+                        </div>
                     </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
                 </div>
             </div>
             )}
 
+
             {/* Modal Dialog cho thông tin chi tiết quốc gia */}
             {isModalOpen && selectedCountry &&  (
-            <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50" onClick={handleCloseModal}>
+            <div className="fixed inset-0 backdrop-blur-sm bg-white/30 flex justify-center items-center z-50" onClick={handleCloseModal}>
                 <div className="bg-white rounded-lg w-11/12 max-w-3xl max-h-[90vh] overflow-auto shadow-xl animate-modalAppear" onClick={(e) => e.stopPropagation()}>
                 <div className="flex justify-between items-center p-4 border-b border-gray-200">
-                    <h2 className="text-2xl font-semibold text-gray-800 m-0"> {selectedCountry.country_name}</h2>
+                    <h2 className="text-2xl font-semibold text-gray-800 m-0">Quốc gia {selectedCountry.country_name}</h2>
                     <button className="bg-transparent border-none text-4xl cursor-pointer text-gray-600 hover:text-black transition-colors duration-200" onClick={handleCloseModal}>×</button>
                 </div>
-                <div className="p-5 flex flex-col md:flex-row gap-5">
+                <div className="p-5 flex flex-col md:flex-row gap-10">
                     <div className="flex-none flex justify-center items-start">
                     {selectedCountry.image_path ? (
-                        <img src={errorImages[selectedCountry.image_path] ? FALLBACK_IMAGE : `${BASE_URL}/${selectedCountry.image_path}`} alt={`Cờ của ${selectedCountry.country_name}`}
-                         className="w-full max-w-xs border border-gray-200 shadow-sm"
+                        <img src={errorImages[selectedCountry.image_path] ? FALLBACK_IMAGE : `${BASE_URL}/${selectedCountry.image_path}`} alt={`${selectedCountry.country_name}`}
+                         className="w-[200px] rounded-lg border-gray-200 shadow-sm object-contain"
                          onError={(e) => handleImageError(e, selectedCountry.image_path)} 
                         />
                         ) : (
@@ -414,7 +475,7 @@ function Home() {
                         )}
                     </div>
                     <div className="flex-1">
-                    <table className="w-full border-collapse">
+                    {/* <table className="w-full border-collapse">
                         <tbody>
                         <tr className="even:bg-gray-50">
                             <th className="p-2 text-left font-semibold text-gray-600 w-2/5 border-b border-gray-200">Khu vực</th>
@@ -493,7 +554,33 @@ function Home() {
                             <td className="p-2 text-left border-b border-gray-200">{selectedCountry.service  || 'N/A'}</td>
                         </tr>
                         </tbody>
+                    </table> */}
+                    <table className="w-full border-collapse">
+                    <tbody>
+                        {Object.keys(fieldDescriptions).map((key) => (
+                        <tr key={key} className="even:bg-gray-50">
+                            <th className="p-2 text-left font-semibold text-gray-600 w-3/5 border-b border-gray-200">
+                            {fieldLabels[key]}
+                            <span className="ml-2 inline-block relative group align-middle">
+                                <FaInfoCircle className="text-blue-500 cursor-pointer" />
+                                <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 bg-white text-gray-800 text-sm 
+                                p-2 rounded shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 z-50">
+                                {fieldDescriptions[key]}
+                                </span>
+                            </span>
+                            </th>
+                            <td className="p-2 text-left border-b border-gray-200">
+                            {selectedCountry[key] !== undefined && selectedCountry[key] !== null
+                                ? ["population", "area", "gdp_per_capita"].includes(key)
+                                ? new Intl.NumberFormat('vi-VN').format(selectedCountry[key])
+                                : selectedCountry[key]
+                                : "N/A"}
+                            </td>
+                        </tr>
+                        ))}
+                    </tbody>
                     </table>
+
                     </div>
                 </div>
                 </div>

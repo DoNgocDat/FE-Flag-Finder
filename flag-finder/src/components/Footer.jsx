@@ -31,7 +31,7 @@ function Footer() {
                     </li>
                     <li className="flex items-center space-x-2">
                         <FaInfoCircle />
-                        <Link to="/about-us" className="hover:text-gray-300">Giới thiệu</Link>
+                        <Link to="/about-us" className="hover:text-gray-300">Về chúng tôi</Link>
                     </li>
                     <li className="flex items-center space-x-2">
                         <FaEnvelope />
